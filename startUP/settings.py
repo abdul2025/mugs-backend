@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os, environ
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -43,7 +44,80 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+
+    ## DRF
+    'rest_framework',
+    'rest_framework_simplejwt',
+
+
+    ## Swagger Required
+    'drf_yasg',
+
+    ## Django APPs
+    'auth_system',
 ]
+
+# DRF ###################################################################
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        'auth_system.authenticate.CustomAuthentication',
+    ],
+    # "DEFAULT_PERMISSION_CLASSES": [
+    #     'rest_framework.permissions.AllowAny',
+    #     # 'rest_framework.permissions.IsAuthenticated',
+    # ]
+
+}
+
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(seconds=5),
+    'REFRESH_TOKEN_LIFETIME': timedelta(seconds=5),
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True,
+    'UPDATE_LAST_LOGIN': False,
+
+    'ALGORITHM': 'HS256',
+    'SIGNING_KEY': SECRET_KEY,
+    'VERIFYING_KEY': None,
+    'AUDIENCE': None,
+    'ISSUER': None,
+    'JWK_URL': None,
+    'LEEWAY': 0,
+
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    'HTTP_X_ACCESS_TOKEN': 'Cookie',
+    'USER_ID_FIELD': 'id',
+    'USER_ID_CLAIM': 'user_id',
+    'USER_AUTHENTICATION_RULE': 'rest_framework_simplejwt.authentication.default_user_authentication_rule',
+
+    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
+    'TOKEN_TYPE_CLAIM': 'token_type',
+    'TOKEN_USER_CLASS': 'rest_framework_simplejwt.models.TokenUser',
+
+    'JTI_CLAIM': 'jti',
+
+    'SLIDING_TOKEN_REFRESH_EXP_CLAIM': 'refresh_exp',
+    'SLIDING_TOKEN_LIFETIME': timedelta(minutes=15),
+    'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
+
+    # custom
+    'AUTH_COOKIE': 'access',
+    # Cookie name. Enables cookies if value is set.
+    'AUTH_COOKIE_REFRESH': 'refresh',
+    # A string like "example.com", or None for standard domain cookie.
+    'AUTH_COOKIE_DOMAIN': None,
+    # Whether the auth cookies should be secure (https:// only).
+    'AUTH_COOKIE_SECURE': False,
+    # Http only cookie flag.It's not fetch by javascript.
+    'AUTH_COOKIE_HTTP_ONLY': True,
+    'AUTH_COOKIE_PATH': '/',        # The path of the auth cookie.
+    # Whether to set the flag restricting cookie leaks on cross-site requests. This can be 'Lax', 'Strict', or None to disable the flag.
+    'AUTH_COOKIE_SAMESITE': "None", # TODO: Modify to Lax
+}
+#########################################################################
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -53,9 +127,11 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'auth_system.auth_cookies_middleware.CustomHeaderMiddleware',
+    'auth_system.auth_cookies_middleware.CustomAssingCookieMiddleware',
 ]
 
-ROOT_URLCONF = 'startUP.urls'
+
 
 TEMPLATES = [
     {
@@ -73,7 +149,6 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'startUP.wsgi.application'
 
 
 # Database
@@ -110,24 +185,25 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-# Internationalization
-# https://docs.djangoproject.com/en/4.2/topics/i18n/
-
+# INTERNATIONALIZATION ##################################################
 LANGUAGE_CODE = 'en-us'
-
-TIME_ZONE = 'UTC'
-
+TIME_ZONE = 'Asia/Riyadh'
 USE_I18N = True
-
 USE_TZ = True
+#########################################################################
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = 'static/'
-
-# Default primary key field type
-# https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
-
+# MISCELLANEOUS #########################################################
+ROOT_URLCONF = 'startUP.urls'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+WSGI_APPLICATION = 'startUP.wsgi.application'
+AUTH_USER_MODEL = 'auth_system.CustomUser'
+#########################################################################
+
+
+# FILE STORAGE ##########################################################
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_URL = '/static/'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+#########################################################################
