@@ -32,7 +32,19 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env('DEBUG')
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
+CORS_ALLOWED_ORIGINS = ['http://localhost:4200']
+CORS_ALLOW_ALL_HEADERS=True
+CORS_ALLOW_ALL_ORIGINS=True
+
+CORS_ALLOW_METHODS = (
+    "DELETE",
+    "GET",
+    "OPTIONS",
+    "PATCH",
+    "POST",
+    "PUT",
+)
 
 
 # Application definition
@@ -46,6 +58,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
 
+     "corsheaders",
+
     ## DRF
     'rest_framework',
     'rest_framework_simplejwt',
@@ -56,18 +70,14 @@ INSTALLED_APPS = [
 
     ## Django APPs
     'auth_system',
+    'accounts'
 ]
 
 # DRF ###################################################################
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
         'auth_system.authenticate.CustomAuthentication',
-    ],
-    # "DEFAULT_PERMISSION_CLASSES": [
-    #     'rest_framework.permissions.AllowAny',
-    #     # 'rest_framework.permissions.IsAuthenticated',
-    # ]
-
+    ]
 }
 
 
@@ -124,6 +134,8 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
+    "django.middleware.common.CommonMiddleware",
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',

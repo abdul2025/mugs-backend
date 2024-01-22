@@ -12,11 +12,11 @@ from drf_yasg import openapi
 # Swagger
 schema_view = get_schema_view(
    openapi.Info(
-      title="Museum Training Platform APIss",
+      title="Mugs Platform APIss",
       default_version='v1',
-      description="API Documentation for VR Museum Training Platform",
+      description="API Documentation for Mugs Platform",
       terms_of_service="",
-      contact=openapi.Contact(email="waleed@backyardex.com"),
+      contact=openapi.Contact(email="example@example.com"),
       license=openapi.License(name=""),
    ),
    public=True,
@@ -27,6 +27,7 @@ schema_view = get_schema_view(
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/auth/', include('auth_system.urls')),
+    path('api/registration', include('accounts.urls')),
 
     # Swagger
     path('', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),

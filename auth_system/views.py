@@ -3,15 +3,16 @@ from django.conf import settings
 from django.middleware import csrf
 from .serializers import MyTokenObtainPairSerializer
 from rest_framework.response import Response
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
-# Create your views here.
 
 class MyTokenObtainPairView(TokenObtainPairView):
+    """_summary_
+
+    """
     serializer_class = MyTokenObtainPairSerializer
 
     def post(self, request, *args, **kwargs):
+
         response = super().post(request, *args, **kwargs)
         if response.status_code == 200:
             response.set_cookie(
@@ -28,15 +29,17 @@ class MyTokenObtainPairView(TokenObtainPairView):
 
 
 class LogOutView(APIView):
+    """_summary_
 
+    """
 
     def post(self, request):
+        """_summary_
+
+        """
         response = Response(data={'status': 'success'})
-        try:
-            # validate the requester cookies
-            raw_token = request.COOKIES.get(settings.SIMPLE_JWT['AUTH_COOKIE']) or None
-        except Exception as er:
-            print('There is not access token in the cookies')
+        # validate the requester cookies has token
+        raw_token = request.COOKIES.get(settings.SIMPLE_JWT['AUTH_COOKIE']) or None
 
         if raw_token is None:
             response = Response(data={'status': 'Already logged out'})
