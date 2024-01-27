@@ -50,6 +50,12 @@ CORS_ALLOW_METHODS = (
 # Application definition
 
 INSTALLED_APPS = [
+
+    ## channel library
+    'chat',
+
+    'channels',
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -70,7 +76,9 @@ INSTALLED_APPS = [
 
     ## Django APPs
     'auth_system',
-    'accounts'
+    'accounts',
+
+
 ]
 
 # DRF ###################################################################
@@ -195,6 +203,10 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+
+
+ASGI_APPLICATION='mugs-backend.asgi.application'
 
 
 # INTERNATIONALIZATION ##################################################

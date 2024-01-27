@@ -3,6 +3,8 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, Permis
 from django.db import models
 from core.models import BaseCustomAuthModel
 from core.validators import _PHONE_REGEX
+from core.enums import Enums
+from django.utils.translation import gettext_lazy as _
 
 class CustomUserManager(BaseUserManager):
     """_summary_
@@ -33,11 +35,26 @@ class CustomUser(AbstractBaseUser, PermissionsMixin, BaseCustomAuthModel):
     """_summary_
 
     """
+    USER_TYPE_CHOICES = (
+        (Enums.REGULAR_USER.value, 'Regular User'),
+        (Enums.ADMIN_USER.value, 'Administrator'),
+        # Add other user types as needed
+    )
+
+    GENDER_CHOICES = (
+        ("male", 'Male'),
+        ("female", 'Female')
+    )
+
+    user_type = models.PositiveSmallIntegerField(_('User Type'), choices=USER_TYPE_CHOICES, default=Enums.REGULAR_USER.value)
+
     email = models.EmailField(unique=True)
-    phone = models.IntegerField(unique=True, validators=[_PHONE_REGEX])
 
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
+
+    gender = models.CharField(max_length=20, choices=GENDER_CHOICES, null=True, blank=True)
+    dob = models.DateField(verbose_name=_("DOB"), max_length=256, null=True)
 
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
