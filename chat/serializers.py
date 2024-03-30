@@ -13,7 +13,7 @@ class UserSerializer(serializers.ModelSerializer):
         Summary description
         """
         model = CustomUser
-        fields = ['id', 'username']
+        fields = ['id', 'first_name']
 
 class MessageSerializer(serializers.ModelSerializer):
     """

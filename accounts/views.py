@@ -15,8 +15,8 @@ class RegistrationView(APIView):
     def post(self, request, *args, **kwargs):
         """_summary_
 
-            # Create Custom user
-            # Create Profile
+            - Create Custom user
+            - Create Profile
         """
         print(request.data)
         user = None

@@ -2,7 +2,6 @@
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db import models
 from core.models import BaseCustomAuthModel
-from core.validators import _PHONE_REGEX
 from core.enums import Enums
 from django.utils.translation import gettext_lazy as _
 
@@ -63,7 +62,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin, BaseCustomAuthModel):
     objects = CustomUserManager()
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['phone','first_name', 'last_name']
+    REQUIRED_FIELDS = ['first_name', 'last_name']
 
     def __str__(self):
         return str(self.email)

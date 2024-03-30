@@ -12,19 +12,22 @@ class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
 
     def post(self, request, *args, **kwargs):
+        """_summary_
+            - create token for the requester and add it as cookie
+        """
 
         response = super().post(request, *args, **kwargs)
         if response.status_code == 200:
+
             response.set_cookie(
-                key=settings.SIMPLE_JWT['AUTH_COOKIE'],
-                value=response.data["access"],
+                settings.SIMPLE_JWT['AUTH_COOKIE'],  # key
+                response.data["access"],  # value
                 expires=settings.SIMPLE_JWT['ACCESS_TOKEN_LIFETIME'],
                 secure=settings.SIMPLE_JWT['AUTH_COOKIE_SECURE'],
                 httponly=settings.SIMPLE_JWT['AUTH_COOKIE_HTTP_ONLY'],
-                samesite=settings.SIMPLE_JWT['AUTH_COOKIE_SAMESITE']
+                samesite='None'
             )
 
-        response["X-CSRFToken"] = csrf.get_token(request)
         return response
 
 
@@ -33,7 +36,7 @@ class LogOutView(APIView):
 
     """
 
-    def post(self, request):
+    def get(self, request):
         """_summary_
 
         """
@@ -50,7 +53,7 @@ class LogOutView(APIView):
             expires='Thu, 01 Jan 1970 00:00:00 GMT',
             secure=settings.SIMPLE_JWT['AUTH_COOKIE_SECURE'],
             httponly=settings.SIMPLE_JWT['AUTH_COOKIE_HTTP_ONLY'],
-            samesite=settings.SIMPLE_JWT['AUTH_COOKIE_SAMESITE']
+            samesite='None'
         )
 
         return response

@@ -27,8 +27,8 @@ schema_view = get_schema_view(
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/auth/', include('auth_system.urls')),
-    path('api/registration', include('accounts.urls')),
-    path('api/chat', include('chat.urls')),
+    path('api/registration/', include('accounts.urls')),
+    path('api/chat/', include('chat.urls')),
 
     # Swagger
     path('', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
